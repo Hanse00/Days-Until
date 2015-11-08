@@ -1,9 +1,9 @@
 import datetime
 
-print "Hello World!"
+a = datetime.date.today()
+entry = raw_input("Enter date in format YYYY-MM-DD: ")
 
-a = datetime.date(2015, 11, 8)
-b = datetime.date(2015, 11, 9)
+b = datetime.datetime.strptime(entry, "%Y-%m-%d").date()
 
 d = b - a
 
