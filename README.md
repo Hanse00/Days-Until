@@ -25,7 +25,7 @@ date    |An ISO 8610 formatted date string
 
 ### Optional Arguments
 Argument|Explenation|Default
---------|-----------
+--------|-----------|-------
 --help  |Print the help message and exit|False
 -h      |Print the number of days in human readable format|False
 
