@@ -2,6 +2,13 @@ import argparse
 import datetime
 import sys
 
+class TimeContinuityError(ValueError):
+    def __init__(self, date):
+        self.value = "'{}' is not in the future!".format(date)
+
+    def __str__(self):
+        return repr(self.value)
+
 def iso_date(string):
     try:
         date = datetime.datetime.strptime(string, "%Y-%m-%d").date()
@@ -15,8 +22,8 @@ def _parse_arguments(args):
         "(starting today) until a given date")
     date_arg_desc = ("the destination date, formatted as a zero padded ISO " +
         "date string, Eg. 2015-11-08")
-    human_arg_desc = ("human readable format, appends the word day or days to" +
-        "the output as appropriate")
+    human_arg_desc = ("human readable format, appends the word day or days " +
+        "to the output as appropriate")
     help_arg_desc = "show this help message and exit"
 
     parser = argparse.ArgumentParser(description=program_desc, add_help=False)
@@ -25,18 +32,34 @@ def _parse_arguments(args):
     parser.add_argument("--help", action="help", help=help_arg_desc)
     return vars(parser.parse_args(args))
 
+def _in_the_future(date):
+    today = datetime.date.today()
+    delta = (date - today).days
+
+    return (delta > 0)
+
+def _human_readable(delta):
+    if delta == 1:
+        return "1 day"
+    else:
+        return "{} days".format(delta)
+
 def main(args):
-    start = datetime.date.today()
     parsed_args = _parse_arguments(args)
 
-    delta = parsed_args["date"] - start
+    given_date = parsed_args["date"]
+    human_readable_format = parsed_args["h"]
 
-    if delta.days <= 0:
-        print "b must be later than a!"
-    elif delta.days == 1:
-        print "1 day"
+    if not _in_the_future(given_date):
+        raise TimeContinuityError(given_date)
+
+    today = datetime.date.today()
+    delta = (given_date - today).days
+
+    if human_readable_format:
+        print _human_readable(delta)
     else:
-        print "{} days".format(delta.days)
+        print delta
 
 if __name__ == "__main__":
     main(sys.argv[1:])
