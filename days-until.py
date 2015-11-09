@@ -14,14 +14,14 @@ def iso_date(string):
         date = datetime.datetime.strptime(string, "%Y-%m-%d").date()
         return date
     except ValueError:
-        msg = "'{}' is not an ISO formatted date".format(string)
+        msg = "'{}' is not an ISO 8601 formatted date".format(string)
         raise argparse.ArgumentTypeError(msg)
 
 def _parse_arguments(args):
     program_desc = ("a tool for calculating the number of days " +
         "(starting today) until a given date")
     date_arg_desc = ("the destination date, formatted as a zero padded ISO " +
-        "date string, Eg. 2015-11-08")
+        "8601 date string, Eg. 2015-11-08")
     human_arg_desc = ("human readable format, appends the word day or days " +
         "to the output as appropriate")
     help_arg_desc = "show this help message and exit"
